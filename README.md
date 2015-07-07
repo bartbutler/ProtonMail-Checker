@@ -1,5 +1,5 @@
 # ProtonMail Checker
-EMail Checker ([Chrome Webstore]) for the privacy email provider [ProtonMail], located in Swiss.
+Install via [Chrome Webstore]. EMail Checker for the privacy email provider [ProtonMail], located in Swiss.
 >License: GNUv2
 
 # Security
