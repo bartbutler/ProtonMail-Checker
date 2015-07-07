@@ -1,5 +1,5 @@
 # ProtonMail Checker
-EMail client for the privacy email provider [ProtonMail], located in Swiss.
+EMail Checker ([Chrome Webstore]) for the privacy email provider [ProtonMail], located in Swiss.
 >License: GNUv2
 
 # Security
@@ -20,3 +20,4 @@ EMail client for the privacy email provider [ProtonMail], located in Swiss.
 [ProtonMail]:https://protonmail.ch/
 [bCrypt]:https://de.wikipedia.org/wiki/Bcrypt
 [SJCL]:https://github.com/bitwiseshiftleft/sjcl
+[Chrome Webstore]:https://chrome.google.com/webstore/detail/protonmail-checker/cmdelhngcpofmpidijaggmejnjofnpip
