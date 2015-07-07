@@ -62,12 +62,14 @@ $(document).ready(function() {
 	
 	$("#flushbutton").click(function(e) { 
 		e.preventDefault();
-		if(confirm("Are you sure that you want to remove all data? This includes your login informations and your pgp keys!"))
+		if(confirm("Are you sure that you want to remove all data?"))
 		{
 			chrome.storage.sync.clear();
 			localStorage.clear(); 
 			chrome.browserAction.setIcon({path:"/img/favicon_grey.png"});
-			window.location=window.location;
+			chrome.runtime.sendMessage({ msg: "submitsave", "encpw": "" }, function(data) { 
+				window.location=window.location;
+			});
 		}
 	});
 	$("#syncbutton").click(function(e) {
@@ -80,9 +82,9 @@ $(document).ready(function() {
 			syncloadcount = 0;
 			chrome.storage.sync.get("smc_sync_container_settings", function (sync_container) {
 				var decdata = jQuery.parseJSON(sync_container.smc_sync_container_settings);
-				
+
 				localStorage.setItem("smc_encrypted", decdata.encrypted);
-				localStorage.setItem("smc_encrypted_hash",  decdata.hash );
+				localStorage.setItem("smc_encrypted_hash", decdata.hash );
 				localStorage.setItem("smc_interval", decdata.interval );
 				localStorage.setItem("smc_popup", decdata.popup );
 				localStorage.setItem("smc_startlogin", decdata.startlogin );
@@ -120,7 +122,7 @@ $(document).ready(function() {
 			
 			var hashtype = 2; //immer bCrypt
 			createhash( encpw, hashtype, function(encrypted_hash) {
-				var settingscontainer = {"encrypted":loadval("smc_encrypted",false), "hash":loadval("smc_encrypted_hash",false), 
+				var settingscontainer = {"encrypted":loadval("smc_encrypted",false), "hash":encrypted_hash, 
 					"interval":loadval("smc_interval",1), "popup":loadval("smc_popup",false), "startlogin":loadval("smc_startlogin",false),
 					"erasecookies":loadval("smc_erasecookies",false)};
 
@@ -148,7 +150,12 @@ $(document).ready(function() {
 function onsyncload()
 {
 	syncloadcount++;
-	if(syncloadcount>=2) window.location = window.location;
+	if(syncloadcount>=2) 
+	{
+		chrome.runtime.sendMessage({ msg: "submitsave", "encpw": "" }, function(data) { 
+			window.location=window.location;
+		});
+	}
 }
 
 function onsyncset(followdir)

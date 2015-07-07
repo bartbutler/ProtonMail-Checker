@@ -119,7 +119,7 @@ function initscript(decpw2)
 {
 	if( islocked()===true )
 	{
-		if( typeof decpw2 == 'undefined' )
+		if( typeof decpw2 == 'undefined' || decpw2.length == 0 )
 		{
 			chrome.browserAction.setIcon({path:"img/favicon_lock.png"});
 			chrome.browserAction.setPopup({popup:"html/unlock.html"});

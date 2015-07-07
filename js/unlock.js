@@ -5,7 +5,6 @@ $(document).ready(function() {
 	$("#decmasterpw").focus();
 	centerdialog("#masterpopup");
 	$("#dellog").click(function() {
-		chrome.storage.sync.clear();
 		localStorage.clear(); 
 		chrome.browserAction.setPopup({popup:""});
 		chrome.browserAction.setIcon({path:"/img/favicon_grey.png"});
@@ -60,6 +59,7 @@ function closeme()
 
 function checkhash(pw, hash, func)
 {
+	console.log("checkhash "+pw+" / "+hash);
 	if( hash.indexOf("$") == -1 ) //SHA-512
 	{
 		var result = getshahash(pw)==hash;
@@ -78,7 +78,8 @@ function checkhash(pw, hash, func)
 
 function getshahash(str)
 {
-	var shaObj = new jsSHA(str, "TEXT");
-	var hash = shaObj.getHash("SHA-512", "HEX");
+	var shaObj = new jsSHA("SHA-512", "TEXT");
+	shaObj.update(str);
+	var hash = shaObj.getHash("B64");
 	return hash;
 }
