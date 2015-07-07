@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SMC - Options</title>
+		<link rel="stylesheet" href="bootstrap.min.css" media="screen">
+		<link rel="stylesheet" href="skin.css" media="screen">
+		<script src="../js/jquery-1.8.3.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/sjcl.js"></script>
+		<script src="../js/sha.js"></script>
+		<script src="../js/isaac.min.js"></script>
+		<script src="../js/bCrypt.min.js"></script>
+		<script src="../js/pwstrength-bootstrap-1.2.5.min.js"></script>
+		<script src="../js/options.js"></script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="options.html">SECMAILCHECKER</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul class="nav navbar-nav">
+				<li class="active"><a href="options.html">Options</a></li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="mailto:nicolas.giese@web.de">Contact</a></li>
+				<li><a href="https://chrome.google.com/webstore/search/nicolas%20giese">More</a></li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+		<div style="width:90%; margin:auto; margin-top:50px;" class="well bs-component">
+			<form class="form-horizontal">
+			  <fieldset>
+				<legend>Manage your login</legend>
+				<div class="form-group">
+				  <label for="inputEmail" class="col-lg-2 control-label">Username</label>
+				  <div class="col-lg-10">
+					<input type="text" class="form-control" id="inputEmail" placeholder="Username">
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+				  <div class="col-lg-10">
+					<input type="password" class="form-control" id="inputPassword" placeholder="Password">
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label for="inputPassword" class="col-lg-2 control-label">
+					Security<br>
+					<img src="/img/cloud.png" title="Using a master password enables Cloud Synchronization" style="cursor:help; margin-top:6px;">
+				</label>
+				  <div class="col-lg-10">
+					<div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="usemasterpass"> Encrypt login by using a master password ?
+                        </label>
+                    </div>
+					<div class="checkbox">
+						<label>
+                          <input type="checkbox" id="startlogin"> Prompt for master password on start ?
+                        </label>
+					</div>
+					<input type="password" class="form-control" id="inputMasterPassword" placeholder="Password" disabled>
+					<div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="erasecookies"> Delete login cookies ?
+                        </label>
+                    </div>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label for="popupNotify" class="col-lg-2 control-label">Notification</label>
+				  <div class="col-lg-10">
+					<select class="form-control" id="selectInterval">
+						<option value="5">Check every 5 minutes</option>
+						<option value="15">Check every 15 minutes</option>
+						<option value="30">Check every 30 minutes</option>
+						<option value="60">Check every 60 minutes</option>
+					</select>
+					<div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="popupNotify"> Notify via popup ?
+                        </label>
+                    </div>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <div class="col-lg-10 col-lg-offset-2">
+					<button type="reset" class="btn btn-default" id="flushbutton">Delete all data</button>
+					<button type="reset" class="btn btn-info" id="syncbutton">Sync all data</button>
+					<button type="submit" class="btn btn-primary" id="submitbutton">Save Changes</button>
+				  </div>
+				</div>
+			  </fieldset>
+			</form>
+		</div>
+	</body>
+</html>
