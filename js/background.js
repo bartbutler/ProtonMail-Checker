@@ -139,7 +139,7 @@ function initscript(decpw2)
 	}
 	checktimer = setInterval(function() {
 		checkit();
-	}, parseInt(loadval("smc_interval",1))*60*1000);
+	}, parseInt(loadval("smc_interval",5))*60*1000);
 	checkit();
 }
 
