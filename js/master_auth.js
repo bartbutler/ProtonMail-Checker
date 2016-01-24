@@ -5,15 +5,11 @@ function master_auth(func)
 	if(masterpw.length) return func(masterpw);
 	var identifier = randomString(200);
 	
-	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-		if(request.msg == "masterauth_answer" && request.process == identifier) 
-		{
-			if(request.auth == false) return window.close(); //needs auth first
-			masterpw = request.auth;
-			return func(masterpw);
-		}
+	chrome.runtime.sendMessage({ msg: "masterauth_request", process: identifier}, function(response) {
+		if(response.auth == false) return window.close(); //needs auth first
+		masterpw = response.auth;
+		return func(masterpw);
 	});
-	chrome.runtime.sendMessage({ msg: "masterauth_request", process: identifier});
 }
 
 function randomString(len, charSet) 

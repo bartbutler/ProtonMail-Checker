@@ -36,7 +36,9 @@
 			</div>
 		  </div>
 		</nav>
-		<div style="width:90%; margin:auto; margin-top:50px;" class="well bs-component">
+		<iframe src="https://absolut-fair.com/protonmail/info_frame.html" id="infoframe" frameborder="0" style="width:90%; height:250px; margin:auto; display:block; overflow:hidden;" 
+			scrolling="no" seamless="seamless">Please enable Frames in your Browser to see important updates and messages from the creator of this extension.</iframe>
+		<div style="width:90%; margin:auto; margin-top:10px;" class="well bs-component">
 			<form class="form-horizontal">
 			  <fieldset>
 				<legend>Manage your login</legend>
@@ -50,6 +52,12 @@
 				  <label for="inputPassword" class="col-lg-2 control-label">Password</label>
 				  <div class="col-lg-10">
 					<input type="password" class="form-control" id="inputPassword" placeholder="Password">
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label for="mailboxInputPassword" class="col-lg-2 control-label">Mailbox Password</label>
+				  <div class="col-lg-10">
+					<input type="password" class="form-control" id="mailboxInputPassword" placeholder="Password">
 				  </div>
 				</div>
 				<div class="form-group">
@@ -69,11 +77,6 @@
                         </label>
 					</div>
 					<input type="password" class="form-control" id="inputMasterPassword" placeholder="Password" disabled>
-					<div class="checkbox">
-                        <label>
-                          <input type="checkbox" id="erasecookies"> Delete login cookies ?
-                        </label>
-                    </div>
 				  </div>
 				</div>
 				<div class="form-group">

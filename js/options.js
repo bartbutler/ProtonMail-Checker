@@ -22,12 +22,13 @@ $(document).ready(function() {
 				var container = opencontainer();
 				$("#inputEmail").val(container.email);
 				$("#inputPassword").val(container.password);
+				$("#mailboxInputPassword").val(container.mailbox);
 				$("#usemasterpass").attr("checked",true);
 				$("#inputMasterPassword").val(decpw).removeAttr("disabled");
 				$("#inputMasterPassword").pwstrength("forceUpdate");
 
-				if( loadval("smc_valid",0)==1 ) $("#inputEmail, #inputPassword").closest(".form-group").addClass("has-success");
-				else if( loadval("smc_valid",0)==2 ) $("#inputEmail, #inputPassword").closest(".form-group").addClass("has-error");
+				if( loadval("smc_valid",0)==1 ) $("#inputEmail, #inputPassword, #mailboxInputPassword").closest(".form-group").addClass("has-success");
+				else if( loadval("smc_valid",0)==2 ) $("#inputEmail, #inputPassword, #mailboxInputPassword").closest(".form-group").addClass("has-error");
 			});
 		});
 	}
@@ -36,16 +37,16 @@ $(document).ready(function() {
 		var container = opencontainer();
 		$("#inputEmail").val(container.email);
 		$("#inputPassword").val(container.password);
+		$("#mailboxInputPassword").val(container.mailbox);
 		$("#startlogin").attr("disabled","disabled");
 		
-		if( loadval("smc_valid",0)==1 ) $("#inputEmail, #inputPassword").closest(".form-group").addClass("has-success");
-		else if( loadval("smc_valid",0)==2 ) $("#inputEmail, #inputPassword").closest(".form-group").addClass("has-error");
+		if( loadval("smc_valid",0)==1 ) $("#inputEmail, #inputPassword, #mailboxInputPassword").closest(".form-group").addClass("has-success");
+		else if( loadval("smc_valid",0)==2 ) $("#inputEmail, #inputPassword, #mailboxInputPassword").closest(".form-group").addClass("has-error");
 	}
 	
 	$("#selectInterval").val(loadval("smc_interval"),"5");
 	if(loadval("smc_popup",false)) $("#popupNotify").attr("checked","checked");
 	if(loadval("smc_startlogin",false)) $("#startlogin").attr("checked","checked");
-	if(loadval("smc_erasecookies",false)) $("#erasecookies").attr("checked","checked");
 	
 	$("#usemasterpass").click(function() {
 		if($(this).is(":checked")) 
@@ -62,14 +63,12 @@ $(document).ready(function() {
 	
 	$("#flushbutton").click(function(e) { 
 		e.preventDefault();
-		if(confirm("Are you sure that you want to remove all data?"))
+		if(confirm("Are you sure that you want to remove all data? This includes your login informations and your pgp keys!"))
 		{
 			chrome.storage.sync.clear();
 			localStorage.clear(); 
 			chrome.browserAction.setIcon({path:"/img/favicon_grey.png"});
-			chrome.runtime.sendMessage({ msg: "submitsave", "encpw": "" }, function(data) { 
-				window.location=window.location;
-			});
+			window.location=window.location;
 		}
 	});
 	$("#syncbutton").click(function(e) {
@@ -82,13 +81,12 @@ $(document).ready(function() {
 			syncloadcount = 0;
 			chrome.storage.sync.get("smc_sync_container_settings", function (sync_container) {
 				var decdata = jQuery.parseJSON(sync_container.smc_sync_container_settings);
-
+				
 				localStorage.setItem("smc_encrypted", decdata.encrypted);
-				localStorage.setItem("smc_encrypted_hash", decdata.hash );
+				localStorage.setItem("smc_encrypted_hash",  decdata.hash );
 				localStorage.setItem("smc_interval", decdata.interval );
 				localStorage.setItem("smc_popup", decdata.popup );
 				localStorage.setItem("smc_startlogin", decdata.startlogin );
-				localStorage.setItem("smc_erasecookies", decdata.erasecookies );
 				onsyncload();
 			});
 			chrome.storage.sync.get("smc_sync_container_account", function (sync_container) {
@@ -102,12 +100,11 @@ $(document).ready(function() {
 		
 		var followdir = 1;
 		
-		var container = {email:$("#inputEmail").val(), password:$("#inputPassword").val()};
+		var container = {email:$("#inputEmail").val(), password:$("#inputPassword").val(), mailbox:$("#mailboxInputPassword").val()};
 		localStorage.setItem("smc_valid", false);
 		localStorage.setItem("smc_interval", $("#selectInterval").val());
 		localStorage.setItem("smc_popup", $("#popupNotify").is(":checked"));
 		localStorage.setItem("smc_startlogin", $("#startlogin").is(":checked"));
-		localStorage.setItem("smc_erasecookies", $("#erasecookies").is(":checked"));
 		
 		var d = new Date();
 		syncsetcount = 0;
@@ -122,9 +119,8 @@ $(document).ready(function() {
 			
 			var hashtype = 2; //immer bCrypt
 			createhash( encpw, hashtype, function(encrypted_hash) {
-				var settingscontainer = {"encrypted":loadval("smc_encrypted",false), "hash":encrypted_hash, 
-					"interval":loadval("smc_interval",1), "popup":loadval("smc_popup",false), "startlogin":loadval("smc_startlogin",false),
-					"erasecookies":loadval("smc_erasecookies",false)};
+				var settingscontainer = {"encrypted":loadval("smc_encrypted",false), "hash":loadval("smc_encrypted_hash",false), 
+					"interval":loadval("smc_interval",1), "popup":loadval("smc_popup",false), "startlogin":loadval("smc_startlogin",false)};
 
 				savecontainer(container);
 				localStorage.setItem("smc_encrypted_hash", encrypted_hash );
@@ -145,17 +141,24 @@ $(document).ready(function() {
 			closeme();
 		}
 	});
+	
+	window.addEventListener('message', function(e) {
+		var eventName = e.data[0];
+		var data = e.data[1];
+		switch(eventName) {
+			case 'setHeight':
+			{
+				$("#infoframe").css("height",data);
+				break;
+			}
+		}
+	}, false);
 });
 
 function onsyncload()
 {
 	syncloadcount++;
-	if(syncloadcount>=2) 
-	{
-		chrome.runtime.sendMessage({ msg: "submitsave", "encpw": "" }, function(data) { 
-			window.location=window.location;
-		});
-	}
+	if(syncloadcount>=2) window.location = window.location;
 }
 
 function onsyncset(followdir)
@@ -172,7 +175,7 @@ function opencontainer()
 {
 	var container = loadval("smc_account_container","{}");
 	if(loadval("smc_encrypted",0)==1 && container.indexOf('"iv":') != -1) container = sjcl.decrypt(masterpw,container);
-	if(!container.length || container == "{}") container = {email:"",password:""};
+	if(!container.length || container == "{}") container = {email:"",password:"",mailbox:""};
 	else container = jQuery.parseJSON(container);
 	return container;
 }
