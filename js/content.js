@@ -6,7 +6,10 @@ if(senddata.indexOf("&")!=-1)
 	endlocation = tempsplit[1];
 }
 
+console.log("content script waiting");
+
 $(window).load(function() {
+	console.log("content script loaded");
 	if(senddata == "redirected")
 	{
 		if(window.location.href.indexOf("/inbox/")!=-1)
@@ -22,34 +25,38 @@ $(window).load(function() {
 	else if(mythread.length > 10) 
 	{
 		chrome.runtime.sendMessage({ msg: "init_frame", thread: mythread}, function(response) {
+			console.log(response);
 			document.getElementById("username").value = response.username;
 			document.getElementById("password").value = response.password;
 			document.getElementById("password").dispatchEvent(new Event('change'));
+			
+			setTimeout(function() {
+				document.getElementById("login_btn").click();
+				
+				waitforelement('#unlock_btn', function() {
+					document.getElementById("password").value = response.mailbox;
+					setTimeout(function() {
+						document.getElementById("password").dispatchEvent(new Event('change'));
+						document.getElementById("unlock_btn").click();
 
-			waitforelement('input[ng-model=mailboxPassword]', function() {
-				document.getElementById("password").value = response.mailbox;
-				setTimeout(function() {
+						waitforelement('#pm_conversations', function() {
+							if(endlocation!="inbox") window.location = "https://mail.protonmail.com/"+endlocation+"?redirected";
+							pagetweaks();
+							chrome.runtime.sendMessage({ msg: "fill_frame_success", thread: mythread, location: endlocation });
+						}, function() { 
+							chrome.runtime.sendMessage({ msg: "fill_frame_error", thread: mythread }); 
+							window.close();
+						});
+						return;
+					}, 1000);
+				}, function() {
+					chrome.runtime.sendMessage({ msg: "fill_frame_error", thread: mythread });
+					window.close();
+				}, function() {
 					document.getElementById("password").dispatchEvent(new Event('change'));
-					document.getElementById("enck").click();
-
-					waitforelement('#message', function() {
-						if(endlocation!="inbox") window.location = "https://protonmail.com/"+endlocation+"?redirected";
-						pagetweaks();
-						chrome.runtime.sendMessage({ msg: "fill_frame_success", thread: mythread, location: endlocation });
-					}, function() { 
-						chrome.runtime.sendMessage({ msg: "fill_frame_error", thread: mythread }); 
-						window.close();
-					});
-					return;
-				}, 1000);
-			}, function() {
-				chrome.runtime.sendMessage({ msg: "fill_frame_error", thread: mythread });
-				window.close();
-			}, function() {
-				document.getElementById("password").dispatchEvent(new Event('change'));
-				document.querySelector('.btn.btn-primary.pull-right').click();
-				$(".btn.btn-primary.pull-right").click();
-			});
+					document.getElementById("login_btn").click();
+				});
+			}, 1000);
 		});
 	}
 	else pagetweaks();
@@ -57,7 +64,7 @@ $(window).load(function() {
 
 function pagetweaks()
 {
-	console.log("page tweaks");
+	return console.log("page tweaks");
 	$(document).on('click', 'div.col-xs-4[ng-click="reply(message)"]', function() {
 		$("#messageHead").fadeOut();
 		$("#composerFrame").detach().insertBefore("#message-content");

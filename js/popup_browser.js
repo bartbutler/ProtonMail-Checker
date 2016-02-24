@@ -1,7 +1,7 @@
 var append_data = window.location.search.substring(1), loaded = 0;
 
 $(document).ready(function() {
-	$("#loadframe").attr("src", 'https://protonmail.com/login?'+append_data);
+	$("#loadframe").attr("src", 'https://mail.protonmail.com/login?'+append_data);
 });
 
 chrome.runtime.onMessage.addListener(
@@ -14,6 +14,7 @@ chrome.runtime.onMessage.addListener(
 			$("#loader").hide();
 			window.resizeTo(newdimensions[1]+18,newdimensions[0]+42);
 			loaded = 1;
+			sendResponse(true);
 		}
 	}
 );

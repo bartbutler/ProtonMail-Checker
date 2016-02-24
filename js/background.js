@@ -15,7 +15,7 @@ chrome.webRequest.onHeadersReceived.addListener(
         };
       }
     }
-  }, { urls: ["https://protonmail.com/*"] }, ["blocking", "responseHeaders"]
+  }, { urls: ["https://mail.protonmail.com/*"] }, ["blocking", "responseHeaders"]
 );
 
 initscript();
@@ -46,7 +46,6 @@ function checkit()
 {
 	var container = opencontainer();
 	if( !container.email.length || !container.mailbox.length ) return chrome.browserAction.setIcon({path:"/img/favicon_grey.png"});
-	console.log(container);
 	if(isdebugging) return console.log("not checking, debugging popup");
 	
 	$.ajaxSetup({

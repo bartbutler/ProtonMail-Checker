@@ -3,7 +3,7 @@
 
 	"name": "ProtonMail Checker",
 	"description": "This extension notifies you about new messages in your account",
-	"version": "1.999.0.2",
+	"version": "1.999.1",
 	"icons": {
 		"16": "img/favicon_16.png",
 		"48": "img/favicon_48.png",
@@ -18,12 +18,13 @@
 		"notifications",
 		"storage",
 		"webRequestBlocking",
-		"https://protonmail.com/*"
+		"https://protonmail.com/*",
+		"https://mail.protonmail.com/*"
 	],
 	"content_scripts": [
         {
         "matches": [
-            "https://protonmail.com/*"
+            "https://mail.protonmail.com/*"
             ],
         "js": ["js/jquery-2.1.4.min.js","js/content.js"],
         "run_at": "document_end",
