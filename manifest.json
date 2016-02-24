@@ -3,7 +3,7 @@
 
 	"name": "ProtonMail Checker",
 	"description": "This extension notifies you about new messages in your account",
-	"version": "1.999.1",
+	"version": "1.999.1.1",
 	"icons": {
 		"16": "img/favicon_16.png",
 		"48": "img/favicon_48.png",

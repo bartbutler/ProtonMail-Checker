@@ -6,10 +6,7 @@ if(senddata.indexOf("&")!=-1)
 	endlocation = tempsplit[1];
 }
 
-console.log("content script waiting");
-
 $(window).load(function() {
-	console.log("content script loaded");
 	if(senddata == "redirected")
 	{
 		if(window.location.href.indexOf("/inbox/")!=-1)
@@ -25,7 +22,6 @@ $(window).load(function() {
 	else if(mythread.length > 10) 
 	{
 		chrome.runtime.sendMessage({ msg: "init_frame", thread: mythread}, function(response) {
-			console.log(response);
 			document.getElementById("username").value = response.username;
 			document.getElementById("password").value = response.password;
 			document.getElementById("password").dispatchEvent(new Event('change'));
