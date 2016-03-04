@@ -58,7 +58,7 @@ function checkit()
 	
 	var senddata = { Username: container.email, Password: container.password, ResponseType: "token", ClientID: clientID, ClientSecret: clientSecret, GrantType: "password", RedirectURI: "https://protonmail.ch", State: randomString(15), Scope: "" };
 	$.ajax({
-		url: 'https://mail.protonmail.com/api/auth',
+		url: 'https://api.protonmail.ch/auth',
 		method: 'POST',
 		data: JSON.stringify(senddata),
 		success: function(data3) {
@@ -85,7 +85,7 @@ function checkit()
 					});
 					
 					$.ajax({
-						url: 'https://mail.protonmail.com/api/messages?Location=0&Unread=1',
+						url: 'https://api.protonmail.ch/messages?Location=0&Unread=1',
 						method: 'GET',
 						success: function(data4) {
 							parseContent(data4);
@@ -198,7 +198,7 @@ function popup_press(notificationId, buttonIndex)
 	{
 		var senddata = {"IDs":[notificationId]};
 		$.ajax({
-			url: 'https://mail.protonmail.com/api/messages/read',
+			url: 'https://api.protonmail.ch/messages/read',
 			method: 'PUT',
 			data: JSON.stringify(senddata),
 			success: function(data5) {
@@ -217,7 +217,7 @@ function popup_press(notificationId, buttonIndex)
 function get_message(id, func)
 {
 	$.ajax({
-		url: 'https://mail.protonmail.com/api/messages/'+id,
+		url: 'https://api.protonmail.ch/messages/'+id,
 		method: 'GET',
 		success: function(data5) {
 			pgpMessage = openpgp.message.readArmored(data5.Message.Body);
