@@ -56,7 +56,7 @@ function checkit()
 		}
 	});
 	
-	var senddata = { Username: container.email, Password: container.password, ResponseType: "token", ClientID: clientID, ClientSecret: clientSecret, GrantType: "password", RedirectURI: "https://protonmail.ch", State: randomString(15), Scope: "" };
+	var senddata = { Username: container.email, Password: container.password, ResponseType: "token", ClientID: clientID, ClientSecret: clientSecret, GrantType: "password", RedirectURI: "https://protonmail.ch", State: randomString(15), Scope: "full mail" };
 	$.ajax({
 		url: 'https://api.protonmail.ch/auth',
 		method: 'POST',
